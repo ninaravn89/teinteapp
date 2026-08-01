@@ -289,25 +289,23 @@ const HOW_TO_APPLY = [
 // ─── STORAGE ──────────────────────────────────────────────────────────────────
 const STORAGE_KEY = "teinte_saved_profiles";
 
-function loadProfiles() {
+function loadProfiles(): any[] {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     return raw ? JSON.parse(raw) : [];
   } catch { return []; }
 }
-
-function saveProfile(profile) {
+function saveProfile(profile: any): any[] {
   try {
     const profiles = loadProfiles();
-    const updated = [profile, ...profiles.filter(p => p.id !== profile.id)].slice(0, 5);
+    const updated = [profile, ...profiles.filter((p: any) => p.id !== profile.id)].slice(0, 5);
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
     return updated;
   } catch { return []; }
 }
-
-function deleteProfile(id) {
+function deleteProfile(id: any): any[] {
   try {
-    const profiles = loadProfiles().filter(p => p.id !== id);
+    const profiles = loadProfiles().filter((p: any) => p.id !== id);
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(profiles));
     return profiles;
   } catch { return []; }
