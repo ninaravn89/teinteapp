@@ -1177,7 +1177,7 @@ export default function App() {
   const [depth, setDepth] = useState(null);
   const [aiReason, setAiReason] = useState("");
   const [imgPreview, setImgPreview] = useState(null);
-  const [profiles, setProfiles] = useState([]);
+  const [profiles, setProfiles] = useState<any[]>([]);
   const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => { setProfiles(loadProfiles()); }, []);
@@ -1192,8 +1192,7 @@ export default function App() {
     try {
       const base64 = await new Promise((res,rej) => { const r=new FileReader(); r.onload=()=>res(r.result.split(",")[1]); r.onerror=rej; r.readAsDataURL(file); });
       const resp = await fetch("https://api.anthropic.com/v1/messages", {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1000, messages:[{ role:"user", content:[
+r.onload = () => res((r.result as string).split(",")[1]);        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1000, messages:[{ role:"user", content:[
           { type:"image", source:{ type:"base64", media_type:file.type||"image/jpeg", data:base64 } },
           { type:"text", text:`Expert makeup artist. Analyze skin photo. cool=blue/purple veins+pink cast, neutral=blue-green veins+balanced, warm=green veins+golden/peachy. fair=very pale, light=light not pale, medium=moderate, deep=rich deep melanin. JSON only no markdown: {"undertone":"cool","depth":"fair","brief_reason":"one sentence"}` }
         ]}]})
@@ -1202,8 +1201,8 @@ export default function App() {
       const txt = d.content.map(i=>i.text||"").join("").replace(/```json|```/g,"").trim();
       const parsed = JSON.parse(txt);
       setUndertone(parsed.undertone); setDepth(parsed.depth); setAiReason(parsed.brief_reason); setIsSaved(false); setStep("undertone");
-    } catch { setStep("manual"); }
-  }, []);
+const data = await resp.json();
+        const txt = data.content.map((i: any)=>i.text||"").join("").replace(/```json|```/g,"").trim();  }, []);
 
   const handleSave = () => {
     if (!undertone || !depth) return;
